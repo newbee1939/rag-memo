@@ -27,3 +27,18 @@ def initialize_vectorstore():
     index_name = os.environ["PINECONE_INDEX"]
     embeddings = OpenAIEmbeddings()
     return Pinecone.from_existing_index(index_name, embeddings)
+
+# 引数で与えられたファイルをUnstructuredPDFLoaderで読み込み、CharacterTextSplitterで分割して、Pineconeに保存する
+if __name__ == "__main__":
+    # コマンドで渡した引数を受け取る（python add_document.py ai-guideline.pdf）
+    file_path = sys.argv[1]
+    loader = UnstructuredPDFLoader(file_path)
+    raw_docs = loader.load()
+    logger.info("Loaded %d documents", len(raw_docs))
+
+    text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=30)
+    docs = text_splitter.split_documents(raw_docs)
+    logger.info("Split %d documents", len(docs))
+
+    vectorstore = initialize_vectorstore()
+    vectorstore.add_documents(docs)
