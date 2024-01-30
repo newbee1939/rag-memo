@@ -12,6 +12,3 @@ python-dotenv = "==1.0.0"
 [dev-packages]
 pdf2image = "==1.16.3"
 "pdfminer.six" = "==20221105"
-
-[requires]
-python_version = "3.9"
