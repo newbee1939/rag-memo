@@ -11,4 +11,4 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 ## バージョン管理方法
 
-https://zenn.dev/yhay81/articles/yhay81-202102-piplock
+https://qiita.com/y-tsutsu/items/54c10e0b2c6b565c887a
