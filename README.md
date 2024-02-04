@@ -1,5 +1,9 @@
 # rag-memo
 
+## 概要
+
+技術メモにRAGを導入するためのアプリ。
+
 ## 使用技術
 
 - [Pinecone](https://www.pinecone.io/)
@@ -8,6 +12,13 @@
 ## 参考実装
 
 https://github.com/newbee1939/langchain-book/tree/main/chapter8
+
+## インストールするパッケージ一覧
+
+- requirements.txt
+    - https://github.com/newbee1939/langchain-book/blob/main/chapter8/requirements.txt
+- requirements-dev.txt
+    - https://github.com/newbee1939/langchain-book/blob/main/chapter8/requirements-dev.txt
 
 ## バージョン管理方法
 
