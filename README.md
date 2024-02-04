@@ -11,4 +11,13 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 ## バージョン管理方法
 
-https://qiita.com/y-tsutsu/items/54c10e0b2c6b565c887a
+1. `pipenv --python 3.10.13`で仮想環境を作る
+2. `pipenv install --dev`でパッケージをインストール
+3. `pipenv shell`で仮想環境の中に入る
+
+参考1: https://qiita.com/y-tsutsu/items/54c10e0b2c6b565c887a
+参考2: https://zenn.dev/nekoallergy/articles/py-env-pipenv01
+
+## メモ
+
+- pipenv の仮想環境は、1 つのフォルダに 1 つの環境が対応しています
