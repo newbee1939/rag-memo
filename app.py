@@ -5,7 +5,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 
 def handle_mention(event, say):
-    chanel = event["channel"]
+    channel = event["channel"]
     thread_ts = event["ts"]
     message = re.sub("<@.*", "", event["text"])
 
