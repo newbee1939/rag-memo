@@ -60,4 +60,5 @@ if __name__ == "__main__":
     vectorstore = initialize_vectorstore()
 
     # 分割されたドキュメントをPineconeに追加する
+    # P212: 重複登録されないために対策が必要
     vectorstore.add_documents(docs)
