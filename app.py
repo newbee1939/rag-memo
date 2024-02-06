@@ -2,7 +2,7 @@
 from add_document import initialize_vectorstore
 from langchain.chains import RetrievalQA
 from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationalBufferMemory
+from langchain.memory import ConversationBufferMemory
 
 def handle_mention(event, say):
     chanel = event["channel"]
@@ -21,7 +21,7 @@ def handle_mention(event, say):
             os.environ["MOMENTO_CACHE"],
             timedelta(hours=int(os.environ["MOMENTO_TTL"])),
         ) 
-        memory = ConversationalBufferMemory(
+        memory = ConversationBufferMemory(
             chat_memory=history, memory_key="chat_history", return_messages=True
         )
 
