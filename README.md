@@ -6,8 +6,19 @@
 
 ## 使用技術
 
+- Python
+- Slack Bolt for Python
 - [Pinecone](https://www.pinecone.io/)
     - GitHubログインを使用
+
+## リンク
+
+- 「技術メモ」SlackワークスペースのURL
+    - w1707316441-wp8500715.slack.com
+- Slackのアプリケーション一覧画面
+    - https://api.slack.com/apps
+- 今回作成したSlackアプリ
+    - https://api.slack.com/apps/A06HKQ009TP?created=1
 
 ## 参考実装
 
@@ -20,7 +31,7 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 - requirements-dev.txt
     - https://github.com/newbee1939/langchain-book/blob/main/chapter8/requirements-dev.txt
 
-## バージョン管理方法
+## バージョン管理方（pipenvを利用）
 
 1. `pipenv --python 3.10.13`で仮想環境を作る
 2. `pipenv install --dev`もしくは`pipenv install`でパッケージをインストール
