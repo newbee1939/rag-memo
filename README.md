@@ -44,3 +44,8 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 ## メモ
 
 - pipenv の仮想環境は、1 つのフォルダに 1 つの環境が対応しています
+
+## 参考記事
+
+- RAGの実案件に取り組んできた今までの知見をまとめてみた
+    - https://dev.classmethod.jp/articles/rag-knowledge-on-real-projects/
