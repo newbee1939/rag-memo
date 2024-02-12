@@ -62,7 +62,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             text=self.message
         )
 
-@app.event("app_mention")
+# @app.event("app_mention")
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
@@ -99,6 +99,12 @@ def handle_mention(event, say):
     # Chat Completion APIの呼び出し後に、履歴キャッシュへのメッセージの追加処理を追加
     ai_message = llm(messages)
     history.add_message(ai_message)
+
+# P180:LazyリスナーでSlackのリトライ前に単純応答を返す
+def just_ack(ack):
+    ack()
+
+app.event("app_mention")(ack=just_ack, lazy=[handle_mention])
 
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
