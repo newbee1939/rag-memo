@@ -8,19 +8,19 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 # import json
 # import logging
-# import re
-# import time
+import re
+import time
+from typing import Any
 # from datetime import timedelta
-# from typing import Any
 
+from langchain.callbacks.base import BaseCallbackHandler
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import LLMResult
 # from add_document import initialize_vectorstore
-# from langchain.callbacks.base import BaseCallbackHandler
 # from langchain.chains import ConversationalRetrievalChain
-# from langchain.chat_models import ChatOpenAI
 # from langchain.memory import ConversationBufferMemory, MomentoChatMessageHistory
-# from langchain.schema import LLMResult
 
-# CHAT_UPDATE_INTERVAL_SEC = 1
+CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
 
@@ -32,18 +32,32 @@ load_dotenv()
 # logger = logging.getLogger(__name__)
 
 # ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
+# AWS Lambdaで実行することを想定し、リスナー関数での処理が完了するまでHTTPレスポンスの送信を遅延させる。
+# AWS LambdaのようなFunction as ServiceではHTTPレスポンスを返した後にスレッドやプロセスの実行を続けることができないため、
+# FaaSで応答を別インスタンスで実行可能にする
+# FaaSで起動する場合process_before_response=Trueは必須の設定
+# 参考: https://slack.dev/bolt-python/ja-jp/concepts
 app = App(
-    # signing_secret=os.environ["SLACK_SIGNING_SECRET"],
-    token=os.environ["SLACK_BOT_TOKEN"]
-    # process_before_response=True,
+    signing_secret=os.environ["SLACK_SIGNING_SECRET"],
+    token=os.environ["SLACK_BOT_TOKEN"],
+    process_before_response=True,
 )
 
 @app.event("app_mention")
 def handle_mention(event, say):
-    user = event["user"]
+    message = re.sub("<@.*>", "", event["text"])
+
+    llm = ChatOpenAI(
+        model_name=os.environ["OPENAI_API_MODEL"],
+        temperature=os.environ["OPENAI_API_TEMPERATURE"]
+    )
+
+    response = llm.predict(message)
+
     # ts=timestamp
     thread_ts = event["ts"]
-    say(thread_ts=thread_ts, text=f"Hello <@{user}>!")
+
+    say(text=response, thread_ts=thread_ts)
 
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
