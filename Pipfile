@@ -10,6 +10,7 @@ tiktoken = "==0.5.1"
 python-dotenv = "==1.0.0"
 openai = "==0.28.0"
 slack-bolt = "==1.18.0"
+slack-sdk = "==3.22.0"
 
 [dev-packages]
 pdf2image = "==1.16.3"
