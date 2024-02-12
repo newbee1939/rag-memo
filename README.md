@@ -24,6 +24,10 @@
 
 https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
+## 参考書籍
+
+ChatGPT/LangChainによるチャットシステム構築[実践]入門
+
 ## インストールするパッケージ一覧
 
 - requirements.txt
@@ -50,3 +54,7 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 - RAGの実案件に取り組んできた今までの知見をまとめてみた
     - https://dev.classmethod.jp/articles/rag-knowledge-on-real-projects/
+
+## TODO
+
+- アプリの仕組みやアーキテクチャを理解する
