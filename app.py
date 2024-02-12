@@ -2,9 +2,12 @@
 import os
 import re
 import time
+import json
+import logging
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 from typing import Any
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
@@ -16,6 +19,13 @@ from datetime import timedelta
 CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
+
+# ログ
+SlackRequestHandler.clear_all_log_handlers()
+logging.basicConfig(
+    format="%(asctime)s [%(levelname)s] %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 # NOTE: Botトークンとソケットモードハンドラーを使ってアプリを初期化する
 # AWS Lambdaで実行することを想定し、リスナー関数での処理が完了するまでHTTPレスポンスの送信を遅延させる
@@ -108,3 +118,19 @@ app.event("app_mention")(ack=just_ack, lazy=[handle_mention])
 
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
+
+# AWS Lambda上で起動するときの呼び出しに指定するhandler関数を作成
+# handler関数でリクエストヘッダを参照し、リトライ時には処理を無視する実装をする
+def handler(event, context):
+    logger.info("handler called")
+    header = event["headers"]
+    logger.info(json.dumps(header))
+
+    if "x-slack-retry-num" in header:
+        logger.info("SKIP > x-slack-retry-num: %s", header["x-slack-retry-num"])
+        return 200
+
+    # AWS Lambda 環境のリクエスト情報を app が処理できるよう変換してくれるアダプター
+    slack_handler = SlackRequestHandler(app=app)
+    # 応答はそのまま AWS Lambda の戻り値として返せます
+    return slack_handler.handle(event, context)
