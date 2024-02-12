@@ -9,13 +9,16 @@ from typing import Any
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import LLMResult
+from langchain.memory import MomentoChatMessageHistory
+from langchain.schema import HumanMessage, LLMResult, SystemMessage
+from datetime import timedelta
 
 CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
 
-# NOTE: Botトークンとソケットモードハンドラーを使ってアプリを初期化する。
-# AWS Lambdaで実行することを想定し、リスナー関数での処理が完了するまでHTTPレスポンスの送信を遅延させる。
+# NOTE: Botトークンとソケットモードハンドラーを使ってアプリを初期化する
+# AWS Lambdaで実行することを想定し、リスナー関数での処理が完了するまでHTTPレスポンスの送信を遅延させる
 # AWS LambdaのようなFunction as ServiceではHTTPレスポンスを返した後にスレッドやプロセスの実行を続けることができないため、
 # FaaSで応答を別インスタンスで実行可能にする
 # FaaSで起動する場合、process_before_response=Trueは必須の設定となる
@@ -28,23 +31,30 @@ app = App(
 
 # 応答ストリームを受け取るCallbackハンドラークラス
 class SlackStreamingCallbackHandler(BaseCallbackHandler):
+    # 最後にメッセージを送信した時刻を初期化
     last_send_time = time.time()
+    # メッセージを初期化
     message = ""
 
     def __init__(self, channel, ts):
         self.channel = channel
         self.ts = ts
 
+    # 新しいトークンの生成タイミングで実行する処理
     def on_llm_new_token(self, token: str, **kwargs) -> None:
+        # 生成されたトークンをメッセージに追加
         self.message += token
 
         now = time.time()
+        # CHAT_UPDATE_INTERVAL_SEC秒以上経過していれば
         if now - self.last_send_time > CHAT_UPDATE_INTERVAL_SEC:
             self.last_send_time = now
+            # SlackのAPIを使用してメッセージを更新
             app.client.chat_update(
                 channel=self.channel, ts=self.ts, text=f"{self.message}..."
             )
 
+    # LLMの処理の終了のタイミングで実行する処理
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         app.client.chat_update(
             channel=self.channel,
