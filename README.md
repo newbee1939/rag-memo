@@ -44,11 +44,12 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 0. コンテナを立ち上げて、appコンテナの中に入る
 1. `pipenv --python 3.10.13`で仮想環境を作る
 2. `pipenv install --dev`もしくは`pipenv install`でパッケージをインストール
-3. `pipenv shell`で仮想環境の中に入る
+3. `pipenv shell`で仮想環境の中に入る（仮想環境に入る必要がない場合は、`pipenv install --system`を実行することでその場にインストールできる。コンテナ内の）
 4. 追加でパッケージを入れたい場合は`pipenv install --dev hoge`や`pipenv install hoge`を使う
 
 参考1: https://qiita.com/y-tsutsu/items/54c10e0b2c6b565c887a
 参考2: https://zenn.dev/nekoallergy/articles/py-env-pipenv01
+参考3: https://qiita.com/Ouvill/items/b1f9aa2fd7d8630466c6
 
 ## メモ
 
