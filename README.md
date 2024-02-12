@@ -10,6 +10,9 @@
 - Slack Bolt for Python
 - [Pinecone](https://www.pinecone.io/)
     - GitHubログインを使用
+- [Memento](https://www.gomomento.com/)
+    - スレッド内のChat機能のキャッシュに利用する
+    - GitHubログインを使用
 
 ## リンク
 
