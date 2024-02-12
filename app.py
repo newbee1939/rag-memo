@@ -49,6 +49,9 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
     def __init__(self, channel, ts):
         self.channel = channel
         self.ts = ts
+        self.interval = CHAT_UPDATE_INTERVAL_SEC
+        # 投稿を更新した累計回数カウンタ
+        self.update_count = 0
 
     # 新しいトークンの生成タイミングで実行する処理
     def on_llm_new_token(self, token: str, **kwargs) -> None:
@@ -63,13 +66,29 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             app.client.chat_update(
                 channel=self.channel, ts=self.ts, text=f"{self.message}..."
             )
+            self.last_send_time = now
+            self.update_count += 1
+
+            # update_countが現在の更新間隔X10より多くなるたびに更新間隔を2倍にする
+            if self.update_count / 10 > self.interval:
+                self.interval = self.interval * 2
 
     # LLMの処理の終了のタイミングで実行する処理
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
+        message_context = "OpenAI APIで生成される情報は不正確または不適切な場合がありますが、当社の見解を述べるものではありません。"
+        message_blocks = [
+            {"type": "section", "text": {"type": "mrkdwn", "text": self.message}},
+            {"type": "divider"},
+            {
+                "type": "context",
+                "elements": [{"type": "mrkdwn", "text": message_context}],
+            },
+        ]
         app.client.chat_update(
             channel=self.channel,
             ts=self.ts,
-            text=self.message
+            text=self.message,
+            blocks=message_blocks,
         )
 
 # @app.event("app_mention")
