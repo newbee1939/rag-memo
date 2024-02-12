@@ -97,7 +97,7 @@ def handle_mention(event, say):
     )
 
     # Chat Completion APIの呼び出し後に、履歴キャッシュへのメッセージの追加処理を追加
-    ai_message = llm(message)
+    ai_message = llm(messages)
     history.add_message(ai_message)
 
 if __name__ == "__main__":
