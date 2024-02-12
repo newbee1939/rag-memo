@@ -31,8 +31,9 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 - requirements-dev.txt
     - https://github.com/newbee1939/langchain-book/blob/main/chapter8/requirements-dev.txt
 
-## バージョン管理方（pipenvを利用）
+## バージョン管理方法（pipenvを利用）
 
+0. コンテナを立ち上げて、appコンテナの中に入る
 1. `pipenv --python 3.10.13`で仮想環境を作る
 2. `pipenv install --dev`もしくは`pipenv install`でパッケージをインストール
 3. `pipenv shell`で仮想環境の中に入る
