@@ -29,7 +29,8 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 ## 参考書籍
 
-ChatGPT/LangChainによるチャットシステム構築[実践]入門
+- ChatGPT/LangChainによるチャットシステム構築[実践]入門
+    - 7章と8章がメイン
 
 ## インストールするパッケージ一覧
 
