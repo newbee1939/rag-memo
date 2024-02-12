@@ -62,7 +62,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             text=self.message
         )
 
-# @app.event("app_mention")
+@app.event("app_mention")
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
