@@ -68,5 +68,13 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 - アプリの仕組みやアーキテクチャを理解する
     - コードの内容も完全に理解する
 - 自分なりにコードをカスタマイズする
-- CI/CDでデプロイ先の切り替えが容易にできるように
+    - GitHubのリポジトリmemoの内容をベクターデータとして保存できるようにする
+- CI/CDでCloud RunもしくはCloud Functionsにデプロイする（安い方）
+    - Slack BoltをGoogle Cloudにデプロイするノウハウ
+    - https://zenn.dev/bisque/articles/slack-bolt-on-google-cloud
+- P212のPineconeへのテキストの重複登録を対応する
+- GitHub Actionsによる自動デプロイ
 - Zennにまとめる
+    - Python環境構築
+    - 技術メモのすヽめ
+    - 技術メモをRAGに取り込んでみた
