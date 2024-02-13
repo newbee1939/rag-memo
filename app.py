@@ -12,9 +12,11 @@ from typing import Any
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import LLMResult
-from langchain.memory import MomentoChatMessageHistory
-from langchain.schema import HumanMessage, LLMResult, SystemMessage
+from langchain.memory import MomentoChatMessageHistory, ConversationBufferMemory
+from langchain.schema import LLMResult
+from langchain.chains import ConversationalRetrievalChain
 from datetime import timedelta
+from add_document import initialize_vectorstore
 
 CHAT_UPDATE_INTERVAL_SEC = 1
 
@@ -105,17 +107,16 @@ def handle_mention(event, say):
     result = say("\n\nTyping...", thread_ts=thread_ts)
     ts = result["ts"]
 
+    vectorstore = initialize_vectorstore()
+
     history = MomentoChatMessageHistory.from_client_params(
         id_ts,
         os.environ["MOMENTO_CACHE"],
         timedelta(hours=int(os.environ["MOMENTO_TTL"])),
     )
-
-    # 履歴の読み出し処理と、ユーザー入力を記憶に追加する処理を追加
-    messages = [SystemMessage(content="You are a good assistant.")]
-    messages.extend(history.messages)
-    messages.append(HumanMessage(content=message))
-    history.add_user_message(message)
+    memory = ConversationBufferMemory(
+        chat_memory=history, memory_key="chat_history", return_messages=True
+    )
 
     callback = SlackStreamingCallbackHandler(channel=channel, ts=ts)
     llm = ChatOpenAI(
@@ -125,9 +126,19 @@ def handle_mention(event, say):
         callbacks=[callback] 
     )
 
-    # Chat Completion APIの呼び出し後に、履歴キャッシュへのメッセージの追加処理を追加
-    ai_message = llm(messages)
-    history.add_message(ai_message)
+    condense_question_llm = ChatOpenAI(
+        model_name=os.environ["OPENAI_API_MODEL"],
+        temperature=os.environ["OPENAI_API_TEMPERATURE"],
+    )
+
+    qa_chain = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=vectorstore.as_retriever(),
+        memory=memory,
+        condense_question_llm=condense_question_llm,
+    )
+
+    qa_chain.run(message)
 
 # P180:LazyリスナーでSlackのリトライ前に単純応答を返す
 def just_ack(ack):
