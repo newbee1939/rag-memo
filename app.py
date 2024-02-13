@@ -1,4 +1,5 @@
 # 質問に関連した文書をPineconeから検索して応答する
+# 基本的にはここの実装が変わることはないはず
 import os
 import re
 import time
