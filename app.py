@@ -6,6 +6,7 @@ import time
 import json
 import logging
 from dotenv import load_dotenv
+# from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
@@ -24,11 +25,10 @@ CHAT_UPDATE_INTERVAL_SEC = 1
 load_dotenv()
 
 # ログ
-SlackRequestHandler.clear_all_log_handlers()
-logging.basicConfig(
-    format="%(asctime)s [%(levelname)s] %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+# logging.basicConfig(
+#     format="%(asctime)s [%(levelname)s] %(message)s", level=logging.INFO
+# )
+# logger = logging.getLogger(__name__)
 
 # NOTE: Botトークンとソケットモードハンドラーを使ってアプリを初期化する
 # AWS Lambdaで実行することを想定し、リスナー関数での処理が完了するまでHTTPレスポンスの送信を遅延させる
@@ -36,15 +36,16 @@ logger = logging.getLogger(__name__)
 # FaaSで応答を別インスタンスで実行可能にする
 # FaaSで起動する場合、process_before_response=Trueは必須の設定となる
 # 参考: https://slack.dev/bolt-python/ja-jp/concepts
+# initialize application
 app = App(
     signing_secret=os.environ["SLACK_SIGNING_SECRET"],
     token=os.environ["SLACK_BOT_TOKEN"],
-    process_before_response=True,
+    # process_before_response=True,
 )
 
 # 応答ストリームを受け取るCallbackハンドラークラス
 class SlackStreamingCallbackHandler(BaseCallbackHandler):
-    # 最後にメッセージを送信した時刻を初期化
+    # 最後にメッセージを送信した時刻を初期化（現在時刻）
     last_send_time = time.time()
     # メッセージを初期化
     message = ""
@@ -63,6 +64,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
 
         now = time.time()
         # CHAT_UPDATE_INTERVAL_SEC秒以上経過していれば
+        # CHAT_UPDATE_INTERVAL_SEC(1秒)間隔で更新する 
         if now - self.last_send_time > CHAT_UPDATE_INTERVAL_SEC:
             self.last_send_time = now
             # SlackのAPIを使用してメッセージを更新
@@ -72,21 +74,21 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             self.last_send_time = now
             self.update_count += 1
 
+            # chat.update処理はSlack APIにおいてTier3のメソッドとして定義されており、1分間に50回までのコール制限がある
+            # これを超えるとRateLimitErrorになる
+            # そこで、当初1秒間隔で更新しているchat.update処理を、10回ごとに更新間隔を2倍に増やしていくことで、
+            # Chat Completion APIの応答時間が長時間かかっても問題が発生しないようにする
             # update_countが現在の更新間隔X10より多くなるたびに更新間隔を2倍にする
             if self.update_count / 10 > self.interval:
                 self.interval = self.interval * 2
 
     # LLMの処理の終了のタイミングで実行する処理
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
-        message_context = "OpenAI APIで生成される情報は不正確または不適切な場合がありますが、当社の見解を述べるものではありません。"
         message_blocks = [
             {"type": "section", "text": {"type": "mrkdwn", "text": self.message}},
             {"type": "divider"},
-            {
-                "type": "context",
-                "elements": [{"type": "mrkdwn", "text": message_context}],
-            },
         ]
+        # 最終的な回答を表示
         app.client.chat_update(
             channel=self.channel,
             ts=self.ts,
@@ -94,7 +96,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             blocks=message_blocks,
         )
 
-# @app.event("app_mention")
+# ここから！
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
@@ -123,8 +125,8 @@ def handle_mention(event, say):
     llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
-        streaming=True,
-        callbacks=[callback] 
+        streaming=True, # ストリーミングで回答を得るための設定
+        callbacks=[callback]
     )
 
     condense_question_llm = ChatOpenAI(
@@ -150,18 +152,18 @@ app.event("app_mention")(ack=just_ack, lazy=[handle_mention])
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
 
-# AWS Lambda上で起動するときの呼び出しに指定するhandler関数を作成
-# handler関数でリクエストヘッダを参照し、リトライ時には処理を無視する実装をする
-def handler(event, context):
-    logger.info("handler called")
-    header = event["headers"]
-    logger.info(json.dumps(header))
+# # AWS Lambda上で起動するときの呼び出しに指定するhandler関数を作成
+# # handler関数でリクエストヘッダを参照し、リトライ時には処理を無視する実装をする
+# def handler(event, context):
+#     logger.info("handler called")
+#     header = event["headers"]
+#     logger.info(json.dumps(header))
 
-    if "x-slack-retry-num" in header:
-        logger.info("SKIP > x-slack-retry-num: %s", header["x-slack-retry-num"])
-        return 200
+#     if "x-slack-retry-num" in header:
+#         logger.info("SKIP > x-slack-retry-num: %s", header["x-slack-retry-num"])
+#         return 200
 
-    # AWS Lambda 環境のリクエスト情報を app が処理できるよう変換してくれるアダプター
-    slack_handler = SlackRequestHandler(app=app)
-    # 応答はそのまま AWS Lambda の戻り値として返せます
-    return slack_handler.handle(event, context)
+#     # AWS Lambda 環境のリクエスト情報を app が処理できるよう変換してくれるアダプター
+#     slack_handler = SlackRequestHandler(app=app)
+#     # 応答はそのまま AWS Lambda の戻り値として返せます
+#     return slack_handler.handle(event, context)
