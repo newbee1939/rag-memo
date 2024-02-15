@@ -78,3 +78,4 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - Python環境構築
     - 技術メモのすヽめ
     - 技術メモをRAGに取り込んでみた
+- メンションしなくても回答が得られるようにしたい
