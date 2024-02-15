@@ -96,10 +96,10 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             blocks=message_blocks,
         )
 
-# ここから！
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
+    # event["text"] 中のすべてのユーザーメンションを削除し、空の文字列で置き換える
     message = re.sub("<@.*>", "", event["text"])
 
     # 投稿のキー(=Momentoキー):初回=event["ts"],2回目以降=event["thread_ts"]
@@ -107,21 +107,27 @@ def handle_mention(event, say):
     if "thread_ts" in event:
         id_ts = event["thread_ts"]
 
-    result = say("\n\nTyping...", thread_ts=thread_ts)
+    # Slack に "Typing..." というメッセージを送信し、その結果を result 変数に格納
+    result = say("\n\nTyping...✍️", thread_ts=thread_ts)
+    # 送信したメッセージのタイムスタンプを取得し、ts 変数に格納
     ts = result["ts"]
 
+    # 情報が格納してあるベクトルストアを初期化し、その結果を vectorstore 変数に格納
     vectorstore = initialize_vectorstore()
 
+    # Momentoからチャットメッセージの履歴を取得し、history 変数に格納
     history = MomentoChatMessageHistory.from_client_params(
         id_ts,
         os.environ["MOMENTO_CACHE"],
         timedelta(hours=int(os.environ["MOMENTO_TTL"])),
     )
+    # メモリーを初期化し、チャット履歴を含む会話バッファを設定
     memory = ConversationBufferMemory(
         chat_memory=history, memory_key="chat_history", return_messages=True
     )
 
     callback = SlackStreamingCallbackHandler(channel=channel, ts=ts)
+    # OpenAIのチャットモデルを初期化
     llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
@@ -129,11 +135,12 @@ def handle_mention(event, say):
         callbacks=[callback]
     )
 
+    # 質問を簡略化するための OpenAI モデルを初期化
     condense_question_llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
     )
-
+    # RAGを用いた回答
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
