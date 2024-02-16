@@ -18,36 +18,19 @@ CHAT_UPDATE_INTERVAL_SECOND = 1
 
 load_dotenv()
 
-# ログ
-# logging.basicConfig(
-#     format="%(asctime)s [%(levelname)s] %(message)s", level=logging.INFO
-# )
-# logger = logging.getLogger(__name__)
-
-# NOTE: Botトークンとソケットモードハンドラーを使ってアプリを初期化する
-# AWS Lambdaで実行することを想定し、リスナー関数での処理が完了するまでHTTPレスポンスの送信を遅延させる
-# AWS LambdaのようなFunction as ServiceではHTTPレスポンスを返した後にスレッドやプロセスの実行を続けることができないため、
-# FaaSで応答を別インスタンスで実行可能にする
-# FaaSで起動する場合、process_before_response=Trueは必須の設定となる
-# 参考: https://slack.dev/bolt-python/ja-jp/concepts
-# initialize application
 app = App(
     signing_secret=os.environ["SLACK_SIGNING_SECRET"],
     token=os.environ["SLACK_BOT_TOKEN"],
-    # process_before_response=True,
 )
 
-# 応答ストリームを受け取るCallbackハンドラークラス
 class SlackStreamingCallbackHandler(BaseCallbackHandler):
-    # 最後にメッセージを送信した時刻を初期化（現在時刻）
     last_send_time = time.time()
-    # メッセージを初期化
     message = ""
 
     def __init__(self, channel, ts):
         self.channel = channel
         self.ts = ts
-        self.interval = CHAT_UPDATE_INTERVAL_SEONDC
+        self.interval = CHAT_UPDATE_INTERVAL_SECOND
         # 投稿を更新した累計回数カウンタ
         self.update_count = 0
 
