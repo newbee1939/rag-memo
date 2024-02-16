@@ -68,10 +68,11 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             blocks=message_blocks,
         )
 
+# Slackのメンションがあったときに動く処理
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
-    # event["text"] 中のすべてのユーザーメンションを削除し、空の文字列で置き換える
+    # 投稿中のユーザーメンションを削除
     message = re.sub("<@.*>", "", event["text"])
 
     # 投稿のキー(=Momentoキー):初回=event["ts"],2回目以降=event["thread_ts"]
@@ -85,7 +86,7 @@ def handle_mention(event, say):
     # 送信したメッセージのタイムスタンプを取得し、ts 変数に格納
     ts = result["ts"]
 
-    # 情報が格納してあるベクトルストアを初期化し、その結果を vectorstore 変数に格納
+    # 独自情報が格納してあるベクトルストアを初期化し、その結果を vectorstore 変数に格納
     vectorstore = initialize_vectorstore()
 
     # Momentoからチャットメッセージの履歴を取得し、history 変数に格納
@@ -94,32 +95,27 @@ def handle_mention(event, say):
         os.environ["MOMENTO_CACHE"],
         timedelta(hours=int(os.environ["MOMENTO_TTL"])),
     )
-    # メモリーを初期化し、チャット履歴を含む会話バッファを設定
     # ChatCompletionAPIはステートレスであり、会話履歴を踏まえた応答を得るには、会話履歴をリクエストに含める必要がある
-    # 会話履歴の保存などの便利な機能を提供するのがLangChain「memory」
+    # 会話履歴の保存などの便利な機能を提供するのがLangChainの「memory」
     # ConversationBufferMemoryは単純に会話履歴を保持する
     memory = ConversationBufferMemory(
         chat_memory=history, memory_key="chat_history", return_messages=True
     )
 
     callback = SlackStreamingCallbackHandler(channel=channel, ts=ts)
-    # OpenAIのチャットモデルを初期化
     llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
         streaming=True, # ストリーミングで回答を得るための設定
         callbacks=[callback]
     )
-
-    # 質問を簡略化するための OpenAI モデルを初期化
     condense_question_llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
     )
     # RAGを用いた回答
     # LangChainにおいてテキストに関連するドキュメントを得るインターフェースを「Retriever」という
-    # 入力に関連する文書を取得（Retrieve）するのに加えて、取得した内容をPromptTemplateにcontextとして
-    # 埋め込んで、LLMに質問して回答（QA）してもらいたい
+    # 入力に関連する文書を取得（Retrieve）するのに加えて、取得した内容をPromptTemplateにcontextとして埋め込んで、LLMに質問して回答（QA）してもらいたい
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
