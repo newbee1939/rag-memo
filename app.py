@@ -14,7 +14,7 @@ from langchain.chains import ConversationalRetrievalChain
 from datetime import timedelta
 from add_document import initialize_vectorstore
 
-CHAT_UPDATE_INTERVAL_SEC = 1
+CHAT_UPDATE_INTERVAL_SECOND = 1
 
 load_dotenv()
 
@@ -47,7 +47,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
     def __init__(self, channel, ts):
         self.channel = channel
         self.ts = ts
-        self.interval = CHAT_UPDATE_INTERVAL_SEC
+        self.interval = CHAT_UPDATE_INTERVAL_SEONDC
         # 投稿を更新した累計回数カウンタ
         self.update_count = 0
 
@@ -57,9 +57,9 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
         self.message += token
 
         now = time.time()
-        # CHAT_UPDATE_INTERVAL_SEC秒以上経過していれば
-        # CHAT_UPDATE_INTERVAL_SEC(1秒)間隔で更新する 
-        if now - self.last_send_time > CHAT_UPDATE_INTERVAL_SEC:
+        # CHAT_UPDATE_INTERVAL_SECOND秒以上経過していれば
+        # CHAT_UPDATE_INTERVAL_SECOND(1秒)間隔で更新する 
+        if now - self.last_send_time > CHAT_UPDATE_INTERVAL_SECOND:
             self.last_send_time = now
             # SlackのAPIを使用してメッセージを更新
             app.client.chat_update(
