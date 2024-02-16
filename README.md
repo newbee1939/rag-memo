@@ -4,6 +4,8 @@
 
 技術メモにRAGを導入するためのアプリ。
 
+RAG=Retrieval Augmented Generation
+
 ## 使用技術
 
 - Python
