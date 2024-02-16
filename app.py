@@ -4,7 +4,6 @@ import time
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 from typing import Any
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
