@@ -108,6 +108,7 @@ def handle_mention(event, say):
         id_ts = event["thread_ts"]
 
     # Slack に "Typing..." というメッセージを送信し、その結果を result 変数に格納
+    # Channelではなくメンションされたスレッド内に返す
     result = say("\n\nTyping...✍️", thread_ts=thread_ts)
     # 送信したメッセージのタイムスタンプを取得し、ts 変数に格納
     ts = result["ts"]
