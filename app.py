@@ -123,6 +123,9 @@ def handle_mention(event, say):
         timedelta(hours=int(os.environ["MOMENTO_TTL"])),
     )
     # メモリーを初期化し、チャット履歴を含む会話バッファを設定
+    # ChatCompletionAPIはステートレスであり、会話履歴を踏まえた応答を得るには、会話履歴をリクエストに含める必要がある
+    # 会話履歴の保存などの便利な機能を提供するのがLangChain「memory」
+    # ConversationBufferMemoryは単純に会話履歴を保持する
     memory = ConversationBufferMemory(
         chat_memory=history, memory_key="chat_history", return_messages=True
     )
@@ -142,6 +145,9 @@ def handle_mention(event, say):
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
     )
     # RAGを用いた回答
+    # LangChainにおいてテキストに関連するドキュメントを得るインターフェースを「Retriever」という
+    # 入力に関連する文書を取得（Retrieve）するのに加えて、取得した内容をPromptTemplateにcontextとして
+    # 埋め込んで、LLMに質問して回答（QA）してもらいたい
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
@@ -151,10 +157,13 @@ def handle_mention(event, say):
 
     qa_chain.run(message)
 
-# P180:LazyリスナーでSlackのリトライ前に単純応答を返す
+# P180
+# Slack Event APIは3秒経過してもサーバーからの応答が完了しない場合エラーになり、最大3回までリトライする
+# つまり、投稿が増えていく
+# それを防ぐために、LazyリスナーでSlackのリトライ前に単純応答を返す
+# Slackに3秒以内に単純な応答を返した後で、コールバックで応答を書き込んでいく
 def just_ack(ack):
     ack()
-
 app.event("app_mention")(ack=just_ack, lazy=[handle_mention])
 
 if __name__ == "__main__":
