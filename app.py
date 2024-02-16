@@ -31,31 +31,26 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
         self.channel = channel
         self.ts = ts
         self.interval = CHAT_UPDATE_INTERVAL_SECOND
-        # 投稿を更新した累計回数カウンタ
-        self.update_count = 0
+        self.update_count = 0 # 投稿を更新した累計回数カウンタ
 
     # 新しいトークンの生成タイミングで実行する処理
     def on_llm_new_token(self, token: str, **kwargs) -> None:
-        # 生成されたトークンをメッセージに追加
+        # 生成されたトークンをメッセージに追加していく
         self.message += token
 
         now = time.time()
-        # CHAT_UPDATE_INTERVAL_SECOND秒以上経過していれば
-        # CHAT_UPDATE_INTERVAL_SECOND(1秒)間隔で更新する 
+        # CHAT_UPDATE_INTERVAL_SECOND(1秒)間隔でLLMの回答を更新する 
         if now - self.last_send_time > CHAT_UPDATE_INTERVAL_SECOND:
-            self.last_send_time = now
-            # SlackのAPIを使用してメッセージを更新
+            # SlackのAPIを使用してLLMの回答を更新する
             app.client.chat_update(
-                channel=self.channel, ts=self.ts, text=f"{self.message}..."
+                channel=self.channel, ts=self.ts, text=f"{self.message}..." # まだ回答途中なので末尾は「...」にしておく
             )
             self.last_send_time = now
             self.update_count += 1
 
-            # chat.update処理はSlack APIにおいてTier3のメソッドとして定義されており、1分間に50回までのコール制限がある
-            # これを超えるとRateLimitErrorになる
-            # そこで、当初1秒間隔で更新しているchat.update処理を、10回ごとに更新間隔を2倍に増やしていくことで、
+            # chat_update処理は1分間に50回までのコール制限があり、これを超えるとRateLimitErrorになる
+            # そこで、当初1秒間隔で更新しているupdate処理を10回ごとに更新間隔を2倍に増やしていくことで、
             # Chat Completion APIの応答時間が長時間かかっても問題が発生しないようにする
-            # update_countが現在の更新間隔X10より多くなるたびに更新間隔を2倍にする
             if self.update_count / 10 > self.interval:
                 self.interval = self.interval * 2
 
