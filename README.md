@@ -73,14 +73,15 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - service.yml
     - Slack BoltをGoogle Cloudにデプロイするノウハウ
         - https://zenn.dev/bisque/articles/slack-bolt-on-google-cloud
+- リポジトリの更新をベクターデータベースに反映させる
 - 自分なりにコードをカスタマイズする
     - GitHubのリポジトリmemoの内容をベクターデータとして保存できるようにする
 - P212のPineconeへのテキストの重複登録を対応する
-- メンションしなくても回答が得られるようにしたい
-    - appのチャンネルで投稿して
-- リポジトリの更新をベクターデータベースに反映させる
-- その他アイコンとか名前とか色々カスタマイズ
 - Zennにまとめる
     - Python環境構築方法について
+    - pipenvとか、その他Pythonについて学んだことをまとめる
+        - Pythonの基礎文法とかもブログにも投稿して良さそう
     - 技術メモのすヽめ
     - 技術メモをRAGに取り込んでみた
+- memoのリポジトリにSlackのリンク貼る
+- 業務経歴の個人開発に追加する

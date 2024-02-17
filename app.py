@@ -70,17 +70,16 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
 
 # Slack AppのDMにメッセージを送ったときに動く処理
 def handle_direct_message(event, say):
-    channel = event["channel"]
-    thread_ts = event["ts"]
-
     # 投稿のキー(=Momentoキー):初回=event["ts"],2回目以降=event["thread_ts"]
+    # 初回のtsと同一スレッドに投稿したときのthread_tsは同じ値になる
+    # 逆に初回のtsと同一スレッドに投稿したときのtsは異なる値になる
     id_ts = event["ts"]
     if "thread_ts" in event:
         id_ts = event["thread_ts"]
 
     # Slack に "Typing..." というメッセージを送信し、その結果を result 変数に格納
     # Channelではなく送信メッセージのスレッド内に返す
-    result = say("\n\nTyping...✍️", thread_ts=thread_ts)
+    result = say("\n\nTyping...✍️", thread_ts=id_ts)
     # 送信したメッセージのタイムスタンプを取得し、ts 変数に格納
     ts = result["ts"]
 
@@ -100,7 +99,7 @@ def handle_direct_message(event, say):
         chat_memory=history, memory_key="chat_history", return_messages=True
     )
 
-    callback = SlackStreamingCallbackHandler(channel=channel, ts=ts)
+    callback = SlackStreamingCallbackHandler(channel=event["channel"], ts=ts)
     llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
