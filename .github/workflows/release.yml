@@ -1,0 +1,83 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - "main"
+
+# permissions:
+#   id-token: write
+#   contents: read
+
+env:
+  PROJECT_ID: gig-sample-383607
+  REGION: asia-northeast1-a
+  # WORKLOAD_IDENTITY_PROVIDER: projects/9299232/locations/global/workloadIdentityPools/github-actions/providers/hoaad
+  # SERVICE_ACCOUNT: hoge-github-actions@hoge_id.iam.gserviceaccount.com
+
+jobs:
+  build-push-image:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      # - name: Authenticate Google Cloud
+      #   id: auth
+      #   uses: google-github-actions/auth@35b0e87d162680511bf346c299f71c9c5c379033 # v1.1.1
+      #   with:
+      #     token_format: access_token
+      #     workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+      #     service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      # - name: Login Artifact Registry
+      #   uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+      #   with:
+      #     registry: ${{ env.REGION }}-docker.pkg.dev
+      #     username: oauth2accesstoken
+      #     password: ${{ steps.auth.outputs.access_token }}
+
+      # - name: Configure Docker
+      #   run: |
+      #     gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --project ${{ env.PROJECT_ID }}
+      #   shell: bash
+
+      # - name: Setup Docker Buildx
+      #   uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+
+      - name: Create .env
+        run: cp .env.example .env
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: .
+          push: true
+          file: ./docker/Dockerfile
+          tags: |
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo/image:${{ github.sha }}-${{ github.run_attempt }}
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo/image:latest
+
+  release:
+    runs-on: ubuntu-22.04
+    needs: build-push-image
+    steps:
+      - uses: actions/checkout@v4
+
+      # - name: Authenticate Google Cloud
+      #   uses: google-github-actions/auth@35b0e87d162680511bf346c299f71c9c5c379033 # v1.1.1
+      #   with:
+      #     token_format: access_token
+      #     workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+      #     service_account: ${{ env.SERVICE_ACCOUNT }}     
+
+      - name: Update Container Image
+        run: |
+          envsubst < ./cloudrun/service.yml > service.yml
+        env:
+          DEPLOY_IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo/image:${{ github.sha }}-${{ github.run_attempt }}
+
+      - name: Deploy Cloud Run Service
+        run: |
+          gcloud run services replace service.yml \
+            --region=${{ env.REGION }} \
+            --project=${{ env.PROJECT_ID }}
