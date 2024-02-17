@@ -83,5 +83,6 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
         - Pythonの基礎文法とかもブログにも投稿して良さそう
     - 技術メモのすヽめ
     - 技術メモをRAGに取り込んでみた
+        - rag-memoをテンプレートとして配布してもいいかも
 - memoのリポジトリにSlackのリンク貼る
 - 業務経歴の個人開発に追加する
