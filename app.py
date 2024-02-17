@@ -24,7 +24,7 @@ app = App(
 )
 
 class SlackStreamingCallbackHandler(BaseCallbackHandler):
-    last_send_time = time.time()
+    last_send_token_time = time.time()
     message = ""
 
     def __init__(self, channel, ts):
@@ -40,12 +40,12 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
 
         now = time.time()
         # CHAT_UPDATE_INTERVAL_SECOND(1秒)間隔でLLMの回答を更新する 
-        if now - self.last_send_time > CHAT_UPDATE_INTERVAL_SECOND:
+        if now - self.last_send_token_time > CHAT_UPDATE_INTERVAL_SECOND:
             # SlackのAPIを使用してLLMの回答を更新する
             app.client.chat_update(
                 channel=self.channel, ts=self.ts, text=f"{self.message}..." # まだ回答途中なので末尾は「...」にしておく
             )
-            self.last_send_time = now
+            self.last_send_token_time = now
             self.update_count += 1
 
             # chat_update処理は1分間に50回までのコール制限があり、これを超えるとRateLimitErrorになる
