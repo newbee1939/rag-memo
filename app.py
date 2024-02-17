@@ -69,6 +69,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
         )
 
 # Slackのメンションがあったときに動く処理
+# ここから
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
@@ -132,7 +133,7 @@ def handle_mention(event, say):
 # Slackに3秒以内に単純な応答を返した後で、コールバックで応答を書き込んでいく
 def just_ack(ack):
     ack()
-app.event("app_mention")(ack=just_ack, lazy=[handle_mention])
+app.event("message")(ack=just_ack, lazy=[handle_mention])
 
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
