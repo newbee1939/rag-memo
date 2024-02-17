@@ -88,6 +88,7 @@ def handle_direct_message(event, say):
     vectorstore = initialize_vectorstore()
 
     # Momentoからチャットメッセージの履歴（前回までの対話内容）を取得し、history 変数に格納
+    # ここから
     history = MomentoChatMessageHistory.from_client_params(
         id_ts, # 同一スレッド内では全ての投稿で一意の値
         os.environ["MOMENTO_CACHE"],
@@ -107,6 +108,9 @@ def handle_direct_message(event, say):
         streaming=True, # ストリーミングで回答を得るための設定
         callbacks=[callback]
     )
+    # AIを使って文書を取得（Retrieve）するための質問を生成するときのLLMの応答はSlackにストリーミングせず、
+    # 最終的な回答を生成するLLMの応答はSlackにストリーミングするため、ConversationalRetrievalChainには
+    # llmとcondense_question_llmという二つのLanguage modelsを与えて初期化している
     condense_question_llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
@@ -114,6 +118,9 @@ def handle_direct_message(event, say):
     # RAGを用いた回答
     # LangChainにおいてテキストに関連するドキュメントを得るインターフェースを「Retriever」という
     # 入力に関連する文書を取得（Retrieve）するのに加えて、取得した内容をPromptTemplateにcontextとして埋め込んで、LLMに質問して回答（QA）してもらいたい
+    # さらに、単純に過去の会話履歴を元に文書を取得（Retrieve）するのではなく過去の会話履歴を元に質問をAIに生成してもらって
+    # その質問を元に文書を取得（Retrieve）したい（P218）
+    # これらをいい感じに行ってくれるのがConversationalRetrievalChain
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
