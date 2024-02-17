@@ -87,7 +87,7 @@ def handle_direct_message(event, say):
     # 独自情報が格納してあるベクトルストアを初期化し、その結果を vectorstore 変数に格納
     vectorstore = initialize_vectorstore()
 
-    # Momentoからチャットメッセージの履歴を取得し、history 変数に格納
+    # Momentoからチャットメッセージの履（前回までの対話内容）を取得し、history 変数に格納
     history = MomentoChatMessageHistory.from_client_params(
         id_ts, # 同一スレッド内では全ての投稿で一意の値
         os.environ["MOMENTO_CACHE"],
