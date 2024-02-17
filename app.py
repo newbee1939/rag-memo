@@ -96,6 +96,7 @@ def handle_direct_message(event, say):
     # ChatCompletionAPIはステートレスであり、会話履歴を踏まえた応答を得るには、会話履歴をリクエストに含める必要がある
     # 会話履歴の保存などの便利な機能を提供するのがLangChainの「memory」
     # ConversationBufferMemoryは単純に会話履歴を保持する
+    # このクラスのオブジェクトは、ChatMessageHistory クラスのインスタンスを chat_memory として保持している
     memory = ConversationBufferMemory(
         chat_memory=history, memory_key="chat_history", return_messages=True
     )
