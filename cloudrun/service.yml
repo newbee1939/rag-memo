@@ -1,0 +1,61 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: rag-memo
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/ingress: internal-and-cloud-load-balancing
+        run.googleapis.com/cpu-throttling: true # リクエスト処理中にのみ CPU を割り当てる
+    spec:
+      containers:
+        - image: ${DEPLOY_IMAGE} 
+          ports:
+            - containerPort: 80
+          env:
+            - name: SLACK_SIGNING_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: SLACK_SIGNING_SECRET
+            - name: SLACK_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: SLACK_BOT_TOKEN
+            - name: SLACK_APP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: SLACK_APP_TOKEN
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: OPENAI_API_KEY
+            - name: PINECONE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: PINECONE_API_KEY
+            - name: PINECONE_INDEX
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: PINECONE_INDEX
+            - name: PINECONE_ENV
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: PINECONE_ENV
+            - name: MOMENTO_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: MOMENTO_AUTH_TOKEN
+            - name: MOMENTO_CACHE
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: MOMENTO_CACHE
