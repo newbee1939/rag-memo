@@ -59,7 +59,6 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         message_blocks = [
             {"type": "section", "text": {"type": "mrkdwn", "text": self.ai_generated_message}},
-            {"type": "divider"},
         ]
         # 最終的な回答を表示
         app.client.chat_update(
