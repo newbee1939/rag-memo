@@ -23,27 +23,28 @@ app = App(
     token=os.environ["SLACK_BOT_TOKEN"],
 )
 
+# メンション付きでメッセージを送ったときに動く処理
 class SlackStreamingCallbackHandler(BaseCallbackHandler):
     last_token_send_time = time.time()
-    message = ""
+    ai_generated_message = ""
 
     def __init__(self, channel, ts):
         self.channel = channel
         self.ts = ts
         self.interval = CHAT_UPDATE_INTERVAL_SECOND
-        self.update_count = 0 # 投稿を更新した累計回数カウンタ
+        self.update_count = 0
 
     # 新しいトークンの生成タイミングで実行する処理
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         # 生成されたトークンをメッセージに追加していく
-        self.message += token
+        self.ai_generated_message += token
 
         now = time.time()
         # CHAT_UPDATE_INTERVAL_SECOND(1秒)間隔でLLMの回答を更新する 
         if now - self.last_token_send_time > CHAT_UPDATE_INTERVAL_SECOND:
             # SlackのAPIを使用してLLMの回答を更新する
             app.client.chat_update(
-                channel=self.channel, ts=self.ts, text=f"{self.message}..." # まだ回答途中なので末尾は「...」にしておく
+                channel=self.channel, ts=self.ts, text=f"{self.ai_generated_message}..." # まだ回答途中なので末尾は「...」にしておく
             )
             self.last_token_send_time = now
             self.update_count += 1
@@ -57,14 +58,14 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
     # LLMの処理の終了のタイミングで実行する処理
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         message_blocks = [
-            {"type": "section", "text": {"type": "mrkdwn", "text": self.message}},
+            {"type": "section", "text": {"type": "mrkdwn", "text": self.ai_generated_message}},
             {"type": "divider"},
         ]
         # 最終的な回答を表示
         app.client.chat_update(
             channel=self.channel,
             ts=self.ts,
-            text=self.message,
+            text=self.ai_generated_message,
             blocks=message_blocks,
         )
 
@@ -73,7 +74,7 @@ def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
     # 投稿中のユーザーメンションを削除
-    message = re.sub("<@.*>", "", event["text"])
+    user_sent_message = re.sub("<@.*>", "", event["text"])
 
     # 投稿のキー(=Momentoキー):初回=event["ts"],2回目以降=event["thread_ts"]
     id_ts = event["ts"]
@@ -123,7 +124,7 @@ def handle_mention(event, say):
         condense_question_llm=condense_question_llm,
     )
 
-    qa_chain.run(message)
+    qa_chain.run(user_sent_message)
 
 # P180
 # Slack Event APIは3秒経過してもサーバーからの応答が完了しない場合エラーになり、最大3回までリトライする
