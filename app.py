@@ -23,7 +23,7 @@ app = App(
     token=os.environ["SLACK_BOT_TOKEN"],
 )
 
-# メンション付きでメッセージを送ったときに動く処理
+# Slack AppのDMにメッセージを送ったときに動く処理
 class SlackStreamingCallbackHandler(BaseCallbackHandler):
     last_token_send_time = time.time()
     ai_generated_message = ""
@@ -68,13 +68,10 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             blocks=message_blocks,
         )
 
-# Slackのメンションがあったときに動く処理
-# ここから
-def handle_mention(event, say):
+# Slack AppのDMにメッセージを送ったときに動く処理
+def handle_direct_message(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
-    # 投稿中のユーザーメンションを削除
-    user_sent_message = re.sub("<@.*>", "", event["text"])
 
     # 投稿のキー(=Momentoキー):初回=event["ts"],2回目以降=event["thread_ts"]
     id_ts = event["ts"]
@@ -82,7 +79,7 @@ def handle_mention(event, say):
         id_ts = event["thread_ts"]
 
     # Slack に "Typing..." というメッセージを送信し、その結果を result 変数に格納
-    # Channelではなくメンションされたスレッド内に返す
+    # Channelではなく送信メッセージのスレッド内に返す
     result = say("\n\nTyping...✍️", thread_ts=thread_ts)
     # 送信したメッセージのタイムスタンプを取得し、ts 変数に格納
     ts = result["ts"]
@@ -124,6 +121,7 @@ def handle_mention(event, say):
         condense_question_llm=condense_question_llm,
     )
 
+    user_sent_message = event["text"]
     qa_chain.run(user_sent_message)
 
 # P180
@@ -133,7 +131,7 @@ def handle_mention(event, say):
 # Slackに3秒以内に単純な応答を返した後で、コールバックで応答を書き込んでいく
 def just_ack(ack):
     ack()
-app.event("message")(ack=just_ack, lazy=[handle_mention])
+app.event("message")(ack=just_ack, lazy=[handle_direct_message])
 
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
