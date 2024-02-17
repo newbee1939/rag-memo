@@ -11,8 +11,7 @@ on:
 
 env:
   PROJECT_ID: gig-sample-383607
-  # REGION: asia-northeast1-a
-  REGION: asia-east1
+  REGION: asia-northeast1
   # WORKLOAD_IDENTITY_PROVIDER: projects/9299232/locations/global/workloadIdentityPools/github-actions/providers/hoaad
   # SERVICE_ACCOUNT: hoge-github-actions@hoge_id.iam.gserviceaccount.com
 
