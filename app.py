@@ -88,7 +88,6 @@ def handle_direct_message(event, say):
     vectorstore = initialize_vectorstore()
 
     # Momentoからチャットメッセージの履歴（前回までの対話内容）を取得し、history 変数に格納
-    # ここから
     history = MomentoChatMessageHistory.from_client_params(
         id_ts, # 同一スレッド内では全ての投稿で一意の値
         os.environ["MOMENTO_CACHE"],
@@ -124,7 +123,7 @@ def handle_direct_message(event, say):
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
-        memory=memory,
+        memory=memory, # 会話履歴は勝手に保存してくれているっぽい？
         condense_question_llm=condense_question_llm,
     )
 
