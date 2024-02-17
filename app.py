@@ -78,9 +78,10 @@ def handle_direct_message(event, say):
         id_ts = event["thread_ts"]
 
     # Slack に "Typing..." というメッセージを送信し、その結果を result 変数に格納
-    # Channelではなく送信メッセージのスレッド内に返す
+    # Channelではなく送信メッセージの同一スレッド内に返す
     result = say("\n\nTyping...✍️", thread_ts=id_ts)
     # 送信したメッセージのタイムスタンプを取得し、ts 変数に格納
+    # tsはid_tsと違い、同一スレッドとか関係なく、それぞれの投稿ごとにユニークな値
     ts = result["ts"]
 
     # 独自情報が格納してあるベクトルストアを初期化し、その結果を vectorstore 変数に格納
@@ -88,7 +89,7 @@ def handle_direct_message(event, say):
 
     # Momentoからチャットメッセージの履歴を取得し、history 変数に格納
     history = MomentoChatMessageHistory.from_client_params(
-        id_ts,
+        id_ts, # 同一スレッド内では全ての投稿で一意の値
         os.environ["MOMENTO_CACHE"],
         timedelta(hours=int(os.environ["MOMENTO_TTL"])),
     )
