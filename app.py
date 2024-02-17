@@ -50,8 +50,8 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             self.update_count += 1
 
             # chat_update処理は1分間に50回までのコール制限があり、これを超えるとRateLimitErrorになる
-            # そこで、当初1秒間隔で更新しているupdate処理を10回ごとに更新間隔を2倍に増やしていくことで、
-            # Chat Completion APIの応答時間が長時間かかっても問題が発生しないようにする
+            # そこで、update_countが現在の更新間隔x10より多くなるたびに更新間隔を2倍にすることで
+            # 短時間でAPIを叩き過ぎないようにする
             if self.update_count / 10 > self.interval:
                 self.interval = self.interval * 2
 
