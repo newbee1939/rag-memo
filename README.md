@@ -67,8 +67,6 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 ## TODO
 
-- アプリの仕組みやアーキテクチャを理解する
-    - コードの内容も完全に理解する
 - CI/CDでCloud Runにデプロイする
     - service.yml
     - Slack BoltをGoogle Cloudにデプロイするノウハウ
