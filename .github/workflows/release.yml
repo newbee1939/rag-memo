@@ -12,8 +12,8 @@ on:
 env:
   PROJECT_ID: gig-sample-383607
   REGION: asia-northeast1
-  # WORKLOAD_IDENTITY_PROVIDER: projects/9299232/locations/global/workloadIdentityPools/github-actions/providers/hoaad
-  # SERVICE_ACCOUNT: hoge-github-actions@hoge_id.iam.gserviceaccount.com
+  WORKLOAD_IDENTITY_PROVIDER: projects/908674848704/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+  SERVICE_ACCOUNT: github-actions@gig-sample-383607.iam.gserviceaccount.com
 
 jobs:
   build-push-image:
@@ -21,13 +21,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - name: Authenticate Google Cloud
-      #   id: auth
-      #   uses: google-github-actions/auth@35b0e87d162680511bf346c299f71c9c5c379033 # v1.1.1
-      #   with:
-      #     token_format: access_token
-      #     workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-      #     service_account: ${{ env.SERVICE_ACCOUNT }}
+      - name: Authenticate Google Cloud
+        id: auth
+        uses: google-github-actions/auth@35b0e87d162680511bf346c299f71c9c5c379033 # v1.1.1
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
       # - name: Login Artifact Registry
       #   uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
