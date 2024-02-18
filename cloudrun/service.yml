@@ -13,6 +13,8 @@ spec:
         - image: ${DEPLOY_IMAGE} 
           ports:
             - containerPort: 80
+          # command:
+          #   - ["python", "app.py"]  
           env:
             - name: SLACK_SIGNING_SECRET
               valueFrom:
