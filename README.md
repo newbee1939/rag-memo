@@ -55,7 +55,7 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 ## メモ
 
-- pipenv の仮想環境は、1 つのフォルダに 1 つの環境が対応しています
+- pipenv の仮想環境は1 つのフォルダに 1 つの環境が対応しています
 
 ## 参考記事
 
@@ -63,7 +63,7 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - https://dev.classmethod.jp/articles/rag-knowledge-on-real-projects/
 - Slack BoltをGoogle Cloudにデプロイするノウハウ
     - https://zenn.dev/bisque/articles/slack-bolt-on-google-cloud
-    - Cloud Runが良さそう？
+    - Cloud Runが良さう？
 
 ## TODO
 
