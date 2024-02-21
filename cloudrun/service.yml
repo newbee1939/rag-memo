@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
     run.googleapis.com/ingress: all 
-    run.googleapis.com/cpu-throttling: "true" # リクエスト処理中にのみ CPU を割り当てる
+    # run.googleapis.com/cpu-throttling: "true" # リクエスト処理中にのみ CPU を割り当てる
   name: rag-memo
 spec:
   template:
