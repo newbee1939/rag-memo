@@ -29,6 +29,10 @@ jobs:
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
 
+      - name: Authenticate Artifact Registry 
+        run: |
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
       # - name: Login Artifact Registry
       #   uses: docker/login-action@v3.0.0
       #   with:
