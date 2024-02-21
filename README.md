@@ -15,6 +15,11 @@ RAG=Retrieval Augmented Generation
 - [Memento](https://www.gomomento.com/)
     - スレッド内のChat機能のキャッシュに利用する
     - GitHubログインを使用
+- [Google Cloud](https://console.cloud.google.com/welcome?project=gig-sample-383607)
+    - Cloud Run
+    - Artifact Registry
+    - Workload Identity
+        - など    
 
 ## リンク
 
