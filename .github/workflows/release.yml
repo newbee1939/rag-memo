@@ -67,12 +67,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - name: Authenticate Google Cloud
-      #   uses: google-github-actions/auth@v1.1.1
-      #   with:
-      #     token_format: access_token
-      #     workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-      #     service_account: ${{ env.SERVICE_ACCOUNT }}     
+      - name: Authenticate Google Cloud
+        uses: google-github-actions/auth@v1.1.1
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}     
 
       - name: Update Container Image
         run: |
