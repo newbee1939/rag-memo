@@ -29,6 +29,8 @@ RAG=Retrieval Augmented Generation
     - https://api.slack.com/apps
 - 今回作成したSlackアプリ
     - https://api.slack.com/apps/A06HKQ009TP?created=1
+- Google Cloud のクレジット
+    - https://console.cloud.google.com/billing/010B07-FE92ED-4BE343?hl=ja&project=gig-sample-383607
 
 ## 参考実装
 
@@ -89,3 +91,4 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
         - rag-memoをテンプレートとして配布してもいいかも
 - memoのリポジトリにSlackのリンク貼る
 - 業務経歴の個人開発に追加する
+- Terraformでコード化しておいていつでも再現できるようにしておく
