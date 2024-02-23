@@ -70,7 +70,6 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - https://dev.classmethod.jp/articles/rag-knowledge-on-real-projects/
 - Slack BoltをGoogle Cloudにデプロイするノウハウ
     - https://zenn.dev/bisque/articles/slack-bolt-on-google-cloud
-    - Cloud Runが良さう？
 
 ## TODO
 
