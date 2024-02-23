@@ -5,5 +5,4 @@ services:
       - .:/app
     ports:
       - "8888:8888"
-    working_dir: /app
     tty: true
