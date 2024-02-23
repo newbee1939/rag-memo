@@ -46,8 +46,8 @@ jobs:
           push: true
           file: ./docker/Dockerfile
           tags: |
-            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo/image:${{ github.sha }}-${{ github.run_attempt }}
-            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo/image:latest
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo:${{ github.sha }}-${{ github.run_attempt }}
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo:latest
 
   release:
     runs-on: ubuntu-22.04
@@ -66,7 +66,7 @@ jobs:
         run: |
           envsubst < ./cloudrun/service.yml > service.yml
         env:
-          DEPLOY_IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo/image:${{ github.sha }}-${{ github.run_attempt }}
+          DEPLOY_IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo:${{ github.sha }}-${{ github.run_attempt }}
 
       - name: Deploy Cloud Run Service
         run: |
