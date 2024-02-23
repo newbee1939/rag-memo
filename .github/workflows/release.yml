@@ -21,10 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Packages
-        run: |
-          pipenv install --system
-
       - name: Authenticate Google Cloud
         id: auth
         uses: google-github-actions/auth@v1.1.1
