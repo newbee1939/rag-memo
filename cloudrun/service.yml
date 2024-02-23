@@ -10,6 +10,7 @@ spec:
       annotations:
         run.googleapis.com/cpu-throttling: "true" # リクエスト処理中にのみ CPU を割り当てる
     spec:
+      serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
       containers:
         - image: ${DEPLOY_IMAGE} 
           ports:
