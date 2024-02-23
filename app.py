@@ -141,4 +141,4 @@ def just_ack(ack):
 app.event("message")(ack=just_ack, lazy=[handle_direct_message])
 
 if __name__ == "__main__":
-    SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
+    SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start(3000)

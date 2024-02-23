@@ -14,7 +14,7 @@ spec:
       containers:
         - image: ${DEPLOY_IMAGE} 
           ports:
-            - containerPort: 80
+            - containerPort: 3000
           command:
             - "python"
           args:
