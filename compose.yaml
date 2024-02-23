@@ -3,6 +3,4 @@ services:
     build: ./docker
     volumes:
       - .:/app
-    ports:
-      - "8888:8888"
     tty: true
