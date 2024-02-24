@@ -68,9 +68,12 @@ jobs:
         env:
           DEPLOY_IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo/image:${{ github.sha }}-${{ github.run_attempt }}
 
+      - name: Allow Unauthenticated Request
+        run: |
+          gcloud run services set-iam-policy rag-memo ./cloudrun/policy.yaml
+
       - name: Deploy Cloud Run Service
         run: |
           gcloud run services replace service.yml \
             --region=${{ env.REGION }} \
             --project=${{ env.PROJECT_ID }}
-            --allow-unauthenticated
