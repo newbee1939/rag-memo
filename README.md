@@ -12,6 +12,11 @@ RAG=Retrieval Augmented Generation
 - NGROK_AUTH_TOKENにngrokのトークンを設定
     - Your Authtoken
         - https://dashboard.ngrok.com/get-started/your-authtoken
+- dc up -d
+- localhost:4040にアクセスしてhttpsのURLを取得
+- 以下のページのURLに設定
+    - https://api.slack.com/apps/A06HKQ009TP/event-subscriptions
+    - ex. https://9b57-210-194-190-35.ngrok-free.app/slack/events
 
 ## 使用技術
 
