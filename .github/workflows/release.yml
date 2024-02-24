@@ -70,7 +70,9 @@ jobs:
 
       - name: Allow Unauthenticated Request
         run: |
-          gcloud run services set-iam-policy rag-memo ./cloudrun/policy.yaml
+          gcloud run services set-iam-policy rag-memo ./cloudrun/policy.yaml \
+            --region=${{ env.REGION }} \
+            --project=${{ env.PROJECT_ID }}
 
       - name: Deploy Cloud Run Service
         run: |
