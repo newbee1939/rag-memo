@@ -9,6 +9,7 @@ spec:
     metadata:
       annotations:
         run.googleapis.com/cpu-throttling: "false" # リクエスト処理中にのみCPUを割り当てる場合はtrueを、CPUを常時割り当てる場合はfalseを設定する
+        autoscaling.knative.dev/minScale: "1" # レスポンス速度を上げるため、一台はコンテナを立てておく
     spec:
       serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
       containers:
