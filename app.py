@@ -142,4 +142,6 @@ app.event("message")(ack=just_ack, lazy=[handle_direct_message])
 
 if __name__ == "__main__":
     # SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start() # Socketモードで起動
+
+    # Cloud RunはPORT変数でリクエストを流すポート番号を渡す
     app.start(port=int(os.environ.get("PORT", 3000))) # HTTPモードで起動
