@@ -3,4 +3,18 @@ services:
     build: ./docker
     volumes:
       - .:/app
+    ports:
+      - "8080:3000"
     tty: true
+  
+  ngrok:
+    image: ngrok/ngrok:3
+    ports:
+      - "4040:4040"
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./docker/ngrok.yml:/etc/ngrok.yml

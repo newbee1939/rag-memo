@@ -6,6 +6,13 @@
 
 RAG=Retrieval Augmented Generation
 
+## 環境構築
+
+- cp docker/ngrok.yml.example docker/ngrok.yml
+- NGROK_AUTH_TOKENにngrokのトークンを設定
+    - Your Authtoken
+        - https://dashboard.ngrok.com/get-started/your-authtoken
+
 ## 使用技術
 
 - Python
@@ -20,6 +27,8 @@ RAG=Retrieval Augmented Generation
     - Artifact Registry
     - Workload Identity
         - など    
+- [ngrok](https://dashboard.ngrok.com/get-started/setup/macos)
+    - GitHubログインを使用
 
 ## リンク
 
@@ -70,6 +79,8 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - https://dev.classmethod.jp/articles/rag-knowledge-on-real-projects/
 - Slack BoltをGoogle Cloudにデプロイするノウハウ
     - https://zenn.dev/bisque/articles/slack-bolt-on-google-cloud
+- Bolt 入門ガイド（HTTP）
+    - https://slack.dev/bolt-python/ja-jp/tutorial/getting-started-http
 
 ## TODO
 
