@@ -4,25 +4,62 @@
 
 技術メモにRAGを導入するためのアプリ。
 
-RAG=Retrieval Augmented Generation
+※RAG=Retrieval Augmented Generation
 
 ## 環境構築
 
-- cp docker/ngrok.yml.example docker/ngrok.yml
-- NGROK_AUTH_TOKENにngrokのトークンを設定
-    - Your Authtoken
-        - https://dashboard.ngrok.com/get-started/your-authtoken
-- dc up -d
-- localhost:4040にアクセスしてhttpsのURLを取得
-- 以下のページのURLに設定
-    - https://api.slack.com/apps/A06HKQ009TP/event-subscriptions
-    - ex. https://9b57-210-194-190-35.ngrok-free.app/slack/events
+1. ngrok.yml作成
+
+```shell
+cp docker/ngrok.yml.example docker/ngrok.yml
+```
+
+2. ngrok.ymlの`NGROK_AUTH_TOKEN`にngrokのトークンを設定
+
+Your Authtoken:  https://dashboard.ngrok.com/get-started/your-authtoken
+
+3. コンテナ立ち上げ
+
+```
+docker compose up -d
+```
+
+4. `localhost:4040`にアクセスしてhttpsのエンドポイントURLを取得
+
+5. エンドポイントのURLを以下のページに設定
+
+https://api.slack.com/apps/A06HKQ009TP/event-subscriptions
+
+ex: https://9b57-210-194-190-35.ngrok-free.app/slack/events
+
+6. コンテナに入る
+
+```shell
+docker compose exec app bash
+```
+
+7. Install Packages
+
+```shell
+pipenv install --system
+```
+
+8. Slack Bolt起動
+
+```shell
+python app.py
+```
+
+9. SlackのDMでアプリにメッセージを送ったら返ってくるはず
+
+w1707316441-wp8500715.slack.com
 
 ## 使用技術
 
 - Python
 - Slack Bolt for Python
 - [Pinecone](https://www.pinecone.io/)
+    - ベクターデータの保存
     - GitHubログインを使用
 - [Memento](https://www.gomomento.com/)
     - スレッド内のChat機能のキャッシュに利用する
@@ -41,12 +78,12 @@ RAG=Retrieval Augmented Generation
 
 ## Deploy方法
 
-- 以下のページのURLに設定
+- 以下のページのURLにCloud RunのURLを設定
     - https://api.slack.com/apps/A06HKQ009TP/event-subscriptions
-    - 以下を設定
-        - https://rag-memo-4wzpkyxieq-an.a.run.app
+    - 以下の値
+        - https://rag-memo-4wzpkyxieq-an.a.run.app/slack/events
 
-## リンク
+## 関連リンク
 
 - 「技術メモ」SlackワークスペースのURL
     - w1707316441-wp8500715.slack.com
@@ -54,7 +91,7 @@ RAG=Retrieval Augmented Generation
     - https://api.slack.com/apps
 - 今回作成したSlackアプリ
     - https://api.slack.com/apps/A06HKQ009TP?created=1
-- Google Cloud のクレジット
+- Google Cloud のクレジット情報
     - https://console.cloud.google.com/billing/010B07-FE92ED-4BE343?hl=ja&project=gig-sample-383607
 
 ## 参考実装
@@ -78,7 +115,7 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 0. コンテナを立ち上げて、appコンテナの中に入る
 1. `pipenv --python 3.10.13`で仮想環境を作る
 2. `pipenv install --dev`もしくは`pipenv install`でパッケージをインストール
-3. `pipenv shell`で仮想環境の中に入る（仮想環境に入る必要がない場合は、`pipenv install --system`を実行することでその場にインストールできる。コンテナ内の）
+3. `pipenv shell`で仮想環境の中に入る（仮想環境に入る必要がない場合は、`pipenv install --system`を実行することでコンテナ内のその場にインストールできる）
 4. 追加でパッケージを入れたい場合は`pipenv install --dev hoge`や`pipenv install hoge`を使う
 
 参考1: https://qiita.com/y-tsutsu/items/54c10e0b2c6b565c887a
@@ -87,7 +124,7 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 ## メモ
 
-- pipenv の仮想環境は1 つのフォルダに 1 つの環境が対応しています
+- pipenv の仮想環境は1 つのフォルダに 1 つの環境が対応している
 
 ## 参考記事
 
@@ -100,10 +137,6 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 ## TODO
 
-- CI/CDでCloud Runにデプロイする
-    - service.yml
-    - Slack BoltをGoogle Cloudにデプロイするノウハウ
-        - https://zenn.dev/bisque/articles/slack-bolt-on-google-cloud
 - リポジトリの更新をベクターデータベースに反映させる
 - 自分なりにコードをカスタマイズする
     - GitHubのリポジトリmemoの内容をベクターデータとして保存できるようにする
@@ -118,3 +151,4 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 - memoのリポジトリにSlackのリンク貼る
 - 業務経歴の個人開発に追加する
 - Terraformでコード化しておいていつでも再現できるようにしておく
+    - 記事にする
