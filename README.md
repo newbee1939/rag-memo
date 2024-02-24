@@ -136,6 +136,8 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - https://www.m3tech.blog/entry/2022/04/15/180000    
 - Bolt 入門ガイド（HTTP）
     - https://slack.dev/bolt-python/ja-jp/tutorial/getting-started-http
+- Cloud Run: CPU の割り当て（サービス）
+    - https://cloud.google.com/run/docs/configuring/cpu-allocation?hl=ja
 
 ## TODO
 
