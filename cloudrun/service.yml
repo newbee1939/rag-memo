@@ -13,8 +13,6 @@ spec:
       serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
       containers:
         - image: ${DEPLOY_IMAGE} 
-          # ports:
-          #   - containerPort: 3000
           command:
             - "python"
           args:
