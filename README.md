@@ -117,10 +117,12 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 2. `pipenv install --dev`もしくは`pipenv install`でパッケージをインストール
 3. `pipenv shell`で仮想環境の中に入る（仮想環境に入る必要がない場合は、`pipenv install --system`を実行することでコンテナ内のその場にインストールできる）
 4. 追加でパッケージを入れたい場合は`pipenv install --dev hoge`や`pipenv install hoge`を使う
+5. パッケージを消したい場合は`pipenv uninstall hoge`を実行した後に`pipenv clean`を実行する
 
 参考1: https://qiita.com/y-tsutsu/items/54c10e0b2c6b565c887a
 参考2: https://zenn.dev/nekoallergy/articles/py-env-pipenv01
 参考3: https://qiita.com/Ouvill/items/b1f9aa2fd7d8630466c6
+参考4: https://qiita.com/mtitg/items/3aa5e5c6d1c1cf6fd3c2
 
 ## メモ
 
