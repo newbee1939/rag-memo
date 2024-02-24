@@ -8,7 +8,7 @@ spec:
   template:
     metadata:
       annotations:
-        run.googleapis.com/cpu-throttling: "true" # リクエスト処理中にのみ CPU を割り当てる
+        run.googleapis.com/cpu-throttling: "false" # リクエスト処理中にのみCPUを割り当てる場合はtrueを、CPUを常時割り当てる場合はfalseを設定する
     spec:
       serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
       containers:
