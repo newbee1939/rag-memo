@@ -34,6 +34,10 @@ RAG=Retrieval Augmented Generation
         - など    
 - [ngrok](https://dashboard.ngrok.com/get-started/setup/macos)
     - GitHubログインを使用
+    - DockerHub
+        - https://hub.docker.com/r/ngrok/ngrok
+    - ドキュメント
+        - https://ngrok.com/docs/using-ngrok-with/docker/    
 
 ## リンク
 
