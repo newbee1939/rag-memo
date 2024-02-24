@@ -39,6 +39,13 @@ RAG=Retrieval Augmented Generation
     - ドキュメント
         - https://ngrok.com/docs/using-ngrok-with/docker/    
 
+## Deploy
+
+- 以下のページのURLに設定
+    - https://api.slack.com/apps/A06HKQ009TP/event-subscriptions
+    - 以下を設定
+        - https://rag-memo-4wzpkyxieq-an.a.run.app
+
 ## リンク
 
 - 「技術メモ」SlackワークスペースのURL
