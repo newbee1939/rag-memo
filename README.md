@@ -150,5 +150,5 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
         - rag-memoをテンプレートとして配布してもいいかも
 - memoのリポジトリにSlackのリンク貼る
 - 業務経歴の個人開発に追加する
-- Terraformでコード化しておいていつでも再現できるようにしておく
+- Terraformでコード化しておいていつでも再現できるようにしておく（パッケージとして配布できるように）
     - 記事にする
