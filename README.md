@@ -132,6 +132,8 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - https://dev.classmethod.jp/articles/rag-knowledge-on-real-projects/
 - Slack BoltをGoogle Cloudにデプロイするノウハウ
     - https://zenn.dev/bisque/articles/slack-bolt-on-google-cloud
+- Slack botをCloud Runで作る時には気をつけろ
+    - https://www.m3tech.blog/entry/2022/04/15/180000    
 - Bolt 入門ガイド（HTTP）
     - https://slack.dev/bolt-python/ja-jp/tutorial/getting-started-http
 
