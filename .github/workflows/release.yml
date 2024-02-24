@@ -73,3 +73,4 @@ jobs:
           gcloud run services replace service.yml \
             --region=${{ env.REGION }} \
             --project=${{ env.PROJECT_ID }}
+            --allow-unauthenticated
