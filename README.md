@@ -17,7 +17,7 @@ cp .env.example .env
 
 2. ngrok.ymlの`NGROK_AUTH_TOKEN`にngrokのトークンを設定
 
-Your Authtoken:  https://dashboard.ngrok.com/get-started/your-authtoken
+Your Authtoken: https://dashboard.ngrok.com/get-started/your-authtoken
 
 3. コンテナ立ち上げ
 
@@ -27,11 +27,11 @@ docker compose up -d
 
 4. `localhost:4040`にアクセスしてhttpsのエンドポイントURLを取得
 
-5. エンドポイントのURLを以下のページに設定
+5. エンドポイントのURLを以下のSlack Appのページに設定
 
 https://api.slack.com/apps/A06HKQ009TP/event-subscriptions
 
-ex: https://9b57-210-194-190-35.ngrok-free.app/slack/events
+設定URLの例: https://9b57-210-194-190-35.ngrok-free.app/slack/events
 
 6. コンテナに入る
 
@@ -69,6 +69,7 @@ w1707316441-wp8500715.slack.com
     - Cloud Run
     - Artifact Registry
     - Workload Identity
+    - Service Account
         - など    
 - [ngrok](https://dashboard.ngrok.com/get-started/setup/macos)
     - GitHubログインを使用
@@ -83,6 +84,7 @@ w1707316441-wp8500715.slack.com
     - https://api.slack.com/apps/A06HKQ009TP/event-subscriptions
     - 以下のページの値
         - https://console.cloud.google.com/run/detail/asia-northeast1/rag-memo/metrics?project=gig-sample-383607
+- mainにマージすればCloud RunとCloud Run Jobsにデプロイされる
 
 ## 関連リンク
 
@@ -148,22 +150,7 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 
 ## TODO
 
-- リポジトリの更新をベクターデータベースに反映させる
-- 自分なりにコードをカスタマイズする
-    - GitHubのリポジトリmemoの内容をベクターデータとして保存できるようにする
-- P212のPineconeへのテキストの重複登録を対応する
-- Zennにまとめる
-    - Python環境構築方法について
-    - pipenvとか、その他Pythonについて学んだことをまとめる
-        - Pythonの基礎文法とかもブログにも投稿して良さそう
-    - 技術メモのすヽめ
-    - 技術メモをRAGに取り込んでみた
-        - rag-memoをテンプレートとして配布してもいいかも
-- memoのリポジトリにSlackのリンク貼る
-- 業務経歴の個人開発に追加する
-- Terraformでコード化しておいていつでも再現できるようにしておく（パッケージとして配布できるように）
-    - 記事にする
-- その他Slackの設定とかもメモ
-- Pineconeの有料プラン
-    - リポジトリの全ての文書をvector dataとして保存する
-- AIの最新。モデル。GPT-4
+- [Pinecone](https://app.pinecone.io/organizations/-Nov2zaq7sqLRZNMzxVH/projects/gcp-starter:klmc0fr/indexes/langchain-book/browser)の有料プランにしたい
+    - リポジトリの全ての文書をVector Dataとして保存する
+- AIの最新モデル（GPT-4）を使用する
+    - https://platform.openai.com/docs/models/
