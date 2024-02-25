@@ -37,8 +37,19 @@ def initialize_vectorstore():
     embeddings = OpenAIEmbeddings()
     return Pinecone.from_existing_index(index_name, embeddings)
 
+def delete_all_vector_data():
+    index_name = os.environ["PINECONE_INDEX"]
+
+    if index_name in pinecone.list_indexes():
+        pinecone.delete_index(index_name)
+
+    pinecone.create_index(name=index_name, metric="cosine", dimension=1536)
+
 # GitLoaderで対象のリポジトリを読み込み、CharacterTextSplitterで分割して、Pineconeに保存する
 if __name__ == "__main__":
+    # 全てのVector Dataを全て消す
+    delete_all_vector_data()
+
     clone_url = "https://github.com/newbee1939/memo"
     branch = "main"
     repo_path = "./tmp/"
