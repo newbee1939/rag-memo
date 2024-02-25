@@ -7,7 +7,6 @@ spec:
     spec:
       template:
         spec:
-          serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
           containers:
           - image: ${DEPLOY_IMAGE} 
           maxRetries: 0
@@ -31,3 +30,5 @@ spec:
                 secretKeyRef:
                   key: "1"
                   name: PINECONE_ENV
+
+          serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
