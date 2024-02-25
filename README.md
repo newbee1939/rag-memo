@@ -140,6 +140,8 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - https://slack.dev/bolt-python/ja-jp/tutorial/getting-started-http
 - Cloud Run: CPU の割り当て（サービス）
     - https://cloud.google.com/run/docs/configuring/cpu-allocation?hl=ja
+- GitHubリポジトリをChatGPTに学習させる方法【Python / LangChain / FAQ】
+    - https://zenn.dev/umi_mori/articles/langchain-indexes-git
 
 ## TODO
 
