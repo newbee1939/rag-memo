@@ -1,14 +1,13 @@
-# PDFファイルのテキストから埋め込み表現（Embeddings）を取得してPineconeに保存する
+# Gitリポジトリから埋め込み表現（Embeddings）を取得してPineconeに保存する
 import logging # ロギング機能を提供するPythonの標準ライブラリ
 import os # オペレーティングシステムとやり取りするための機能を提供するPythonの標準ライブラリ
-import sys # Pythonインタプリタに関連する情報や機能を提供するPythonの標準ライブラリ
 
 import pinecone
 from dotenv import load_dotenv
-from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Pinecone
+from langchain.document_loaders import GitLoader
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
@@ -38,12 +37,18 @@ def initialize_vectorstore():
     embeddings = OpenAIEmbeddings()
     return Pinecone.from_existing_index(index_name, embeddings)
 
-# 引数で与えられたファイルをUnstructuredPDFLoaderで読み込み、CharacterTextSplitterで分割して、Pineconeに保存する
+# GitLoaderで対象のリポジトリを読み込み、CharacterTextSplitterで分割して、Pineconeに保存する
 if __name__ == "__main__":
-    # コマンドで渡した引数を受け取る（python add_document.py ai-guideline.pdf）
-    file_path = sys.argv[1]
-    # 引数で与えられたファイルをUnstructuredPDFLoaderで読み込む
-    loader = UnstructuredPDFLoader(file_path)
+    clone_url = "https://github.com/newbee1939/memo"
+    branch = "main"
+    filter_ext = ".md"
+
+    loader = GitLoader(
+        clone_url=clone_url,
+        branch=branch,
+        file_filter=lambda file_path: file_path.endswith(filter_ext),
+    )
+
     raw_docs = loader.load()
 
     # 読み込んだドキュメントの数をログに記録する
