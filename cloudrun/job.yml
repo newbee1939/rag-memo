@@ -26,6 +26,11 @@ spec:
                 secretKeyRef:
                   key: "1"
                   name: PINECONE_INDEX
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: OPENAI_API_KEY
             - name: PINECONE_ENV
               valueFrom:
                 secretKeyRef:
