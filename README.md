@@ -8,10 +8,11 @@
 
 ## 環境構築
 
-1. ngrok.yml作成
+1. ngrok.ymlと.env作成
 
 ```shell
 cp docker/ngrok.yml.example docker/ngrok.yml
+cp .env.example .env
 ```
 
 2. ngrok.ymlの`NGROK_AUTH_TOKEN`にngrokのトークンを設定

@@ -4,10 +4,9 @@ import os # オペレーティングシステムとやり取りするための�
 
 import pinecone
 from dotenv import load_dotenv
-from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import Pinecone
 from langchain.document_loaders import GitLoader
+from initialize_vectorstore import initialize_vectorstore
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
@@ -22,22 +21,7 @@ logging.basicConfig(
 # 引数はロガー名、__name__はモジュール名
 logger = logging.getLogger(__name__)
 
-# PineconeをLangChainのVectors storeとして使う準備を整える関数
-def initialize_vectorstore():
-    # Pineconeに接続し、APIキーと環境を設定する
-    pinecone.init(
-        api_key=os.environ["PINECONE_API_KEY"],
-        environment=os.environ["PINECONE_ENV"],
-    )
-
-    # インデックス名を取得し、OpenAIEmbeddingsを用いてPineconeに既存のインデックスを作成する
-    index_name = os.environ["PINECONE_INDEX"]
-    # OpenAI の埋め込み（ベクトル表現）を取得します。これは、テキストや単語などの自然言語処理タスクで使用されるテキストデータの特徴を表現するベクトルです。
-    # 例えば、ある単語が他の単語とどの程度関連しているかを数値化することができます
-    embeddings = OpenAIEmbeddings()
-    return Pinecone.from_existing_index(index_name, embeddings)
-
-def delete_all_vector_data():
+def __delete_all_vector_data():
     index_name = os.environ["PINECONE_INDEX"]
 
     if index_name in pinecone.list_indexes():
@@ -48,7 +32,7 @@ def delete_all_vector_data():
 # GitLoaderで対象のリポジトリを読み込み、CharacterTextSplitterで分割して、Pineconeに保存する
 if __name__ == "__main__":
     # 全てのVector Dataを全て消す
-    delete_all_vector_data()
+    __delete_all_vector_data()
 
     clone_url = "https://github.com/newbee1939/memo"
     branch = "main"
