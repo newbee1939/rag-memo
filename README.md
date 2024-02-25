@@ -143,6 +143,8 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - https://cloud.google.com/run/docs/configuring/cpu-allocation?hl=ja
 - GitHubリポジトリをChatGPTに学習させる方法【Python / LangChain / FAQ】
     - https://zenn.dev/umi_mori/articles/langchain-indexes-git
+- Cloud Run YAML Reference 
+    - https://cloud.google.com/run/docs/reference/yaml/v1
 
 ## TODO
 
