@@ -9,6 +9,7 @@ spec:
         spec:
           containers:
           - image: ${DEPLOY_IMAGE} 
+          maxRetries: 0
           command:
             - "python"
           args:
