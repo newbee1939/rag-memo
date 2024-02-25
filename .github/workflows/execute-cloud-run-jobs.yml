@@ -1,13 +1,9 @@
 name: Execute Cloud Run Jobs 
 
-# on:
-#   schedule:
-#     - cron: "0 0 * * 1" # 週一回実行　
-
 on:
-  push:
-    branches:
-      - "main"
+  schedule:
+    # - cron: "0 0 * * 1" # 週1回実行　
+    - cron: "0 0 1 * *" # 月1回実行
 
 permissions:
   id-token: write
@@ -19,7 +15,7 @@ env:
   SERVICE_ACCOUNT: github-actions@gig-sample-383607.iam.gserviceaccount.com
 
 jobs:
-  build-push-image:
+  execute-cloudrun-jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -31,9 +27,6 @@ jobs:
           token_format: access_token
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      # - name: Create .env
-      #   run: cp .env.example .env
 
       - name: Execute Cloud Run Jobs
         run: |
