@@ -41,11 +41,13 @@ def initialize_vectorstore():
 if __name__ == "__main__":
     clone_url = "https://github.com/newbee1939/memo"
     branch = "main"
+    repo_path = "./"
     filter_ext = ".md"
 
     loader = GitLoader(
         clone_url=clone_url,
         branch=branch,
+        repo_path=repo_path,
         file_filter=lambda file_path: file_path.endswith(filter_ext),
     )
 
