@@ -8,7 +8,7 @@ spec:
       template:
         spec:
           maxRetries: 0
-          serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
+          # serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
           containers:
           - image: ${DEPLOY_IMAGE}
             name: add-vector-container
