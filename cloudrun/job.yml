@@ -30,5 +30,4 @@ spec:
                 secretKeyRef:
                   key: "1"
                   name: PINECONE_ENV
-
           serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
