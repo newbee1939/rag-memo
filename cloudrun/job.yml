@@ -1,0 +1,31 @@
+apiVersion: run.googleapis.com/v1
+kind: Job
+metadata:
+  name: add-vector-data 
+spec:
+  template:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: ${DEPLOY_IMAGE} 
+          command:
+            - "python"
+          args:
+            - "add_vector_data.py"
+          env:
+            - name: PINECONE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: PINECONE_API_KEY
+            - name: PINECONE_INDEX
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: PINECONE_INDEX
+            - name: PINECONE_ENV
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: PINECONE_ENV
