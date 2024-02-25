@@ -44,4 +44,4 @@ jobs:
 
       - name: Execute Cloud Run Jobs
         run: |
-          gcloud run jobs execute add-vector-data --execute-now
+          gcloud run jobs execute add-vector-data
