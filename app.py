@@ -1,18 +1,19 @@
 import os
 import re
 import time
+import pinecone
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from typing import Any
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import Pinecone
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import LLMResult
 from langchain.memory import MomentoChatMessageHistory, ConversationBufferMemory
-from langchain.schema import LLMResult
 from langchain.chains import ConversationalRetrievalChain
 from datetime import timedelta
-from initialize_vectorstore import initialize_vectorstore
 
 CHAT_UPDATE_INTERVAL_SECOND = 1
 
@@ -69,6 +70,16 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             blocks=message_blocks,
         )
 
+def __initialize_vectorstore():
+    pinecone.init(
+        api_key=os.environ["PINECONE_API_KEY"],
+        environment=os.environ["PINECONE_ENV"],
+    )
+
+    index_name = os.environ["PINECONE_INDEX"]
+    embeddings = OpenAIEmbeddings()
+    return Pinecone.from_existing_index(index_name, embeddings)
+
 # Slack AppのDMにメッセージを送ったときに動く処理
 def handle_direct_message(event, say):
     # 投稿のキー(=Momentoキー):初回=event["ts"],2回目以降=event["thread_ts"]
@@ -86,7 +97,7 @@ def handle_direct_message(event, say):
     ts = result["ts"]
 
     # 独自情報が格納してあるベクトルストアを初期化し、その結果を vectorstore 変数に格納
-    vectorstore = initialize_vectorstore()
+    vectorstore = __initialize_vectorstore()
 
     # Momentoからチャットメッセージの履歴（前回までの対話内容）を取得し、history 変数に格納
     history = MomentoChatMessageHistory.from_client_params(
