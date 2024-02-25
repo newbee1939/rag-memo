@@ -4,10 +4,10 @@ name: Execute Cloud Run Jobs
 #   schedule:
 #     - cron: "0 0 * * 1" # 週一回実行　
 
-# on:
-#   push:
-#     branches:
-#       - "main"
+on:
+  push:
+    branches:
+      - "main"
 
 permissions:
   id-token: write
@@ -32,12 +32,16 @@ jobs:
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
 
-      - name: Login Artifact Registry
-        uses: docker/login-action@v3.0.0
-        with:
-          registry: ${{ env.REGION }}-docker.pkg.dev
-          username: oauth2accesstoken
-          password: ${{ steps.auth.outputs.access_token }}
+      # - name: Login Artifact Registry
+      #   uses: docker/login-action@v3.0.0
+      #   with:
+      #     registry: ${{ env.REGION }}-docker.pkg.dev
+      #     username: oauth2accesstoken
+      #     password: ${{ steps.auth.outputs.access_token }}
 
-      - name: Create .env
-        run: cp .env.example .env
+      # - name: Create .env
+      #   run: cp .env.example .env
+
+      - name: Execute Cloud Run Jobs
+        run: |
+          gcloud run jobs execute add-vector-data --execute-now
