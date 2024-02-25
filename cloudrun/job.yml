@@ -5,29 +5,27 @@ metadata:
 spec:
   template:
     spec:
-      template:
-        spec:
-          serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
-          containers:
-          - image: ${DEPLOY_IMAGE} 
-          maxRetries: 0
-          command:
-            - "python"
-          args:
-            - "add_vector_data.py"
-          env:
-            - name: PINECONE_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: "1"
-                  name: PINECONE_API_KEY
-            - name: PINECONE_INDEX
-              valueFrom:
-                secretKeyRef:
-                  key: "1"
-                  name: PINECONE_INDEX
-            - name: PINECONE_ENV
-              valueFrom:
-                secretKeyRef:
-                  key: "1"
-                  name: PINECONE_ENV
+      serviceAccountName: cloud-run@gig-sample-383607.iam.gserviceaccount.com
+      containers:
+      - image: ${DEPLOY_IMAGE} 
+      maxRetries: 0
+      command:
+        - "python"
+      args:
+        - "add_vector_data.py"
+      env:
+        - name: PINECONE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: "1"
+              name: PINECONE_API_KEY
+        - name: PINECONE_INDEX
+          valueFrom:
+            secretKeyRef:
+              key: "1"
+              name: PINECONE_INDEX
+        - name: PINECONE_ENV
+          valueFrom:
+            secretKeyRef:
+              key: "1"
+              name: PINECONE_ENV
