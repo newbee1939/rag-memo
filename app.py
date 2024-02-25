@@ -12,7 +12,7 @@ from langchain.memory import MomentoChatMessageHistory, ConversationBufferMemory
 from langchain.schema import LLMResult
 from langchain.chains import ConversationalRetrievalChain
 from datetime import timedelta
-from add_document import initialize_vectorstore
+from add_vector_data import initialize_vectorstore
 
 CHAT_UPDATE_INTERVAL_SECOND = 1
 
