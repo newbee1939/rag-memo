@@ -14,6 +14,7 @@ slack-sdk = "==3.22.0"
 momento = "==1.9.2"
 momento-wire-types = "==0.75.0"
 boto3 = "==1.28.49"
+gitpython = "*"
 
 [dev-packages]
 pdf2image = "==1.16.3"
