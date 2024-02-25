@@ -163,4 +163,5 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
     - 記事にする
 - その他Slackの設定とかもメモ
 - Pineconeの有料プラン
+    - リポジトリの全ての文書をvector dataとして保存する
 - AIの最新。モデル。GPT-4
