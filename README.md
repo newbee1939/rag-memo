@@ -80,8 +80,8 @@ w1707316441-wp8500715.slack.com
 
 - 以下のページのURLにCloud RunのURLを設定
     - https://api.slack.com/apps/A06HKQ009TP/event-subscriptions
-    - 以下の値
-        - https://rag-memo-4wzpkyxieq-an.a.run.app/slack/events
+    - 以下のページの値
+        - https://console.cloud.google.com/run/detail/asia-northeast1/rag-memo/metrics?project=gig-sample-383607
 
 ## 関連リンク
 
