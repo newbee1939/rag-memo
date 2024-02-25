@@ -17,6 +17,4 @@ boto3 = "==1.28.49"
 gitpython = "*"
 
 [dev-packages]
-pdf2image = "==1.16.3"
-"pdfminer.six" = "==20221105"
 unstructured = "==0.10.15"
