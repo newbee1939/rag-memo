@@ -43,6 +43,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
         # CHAT_UPDATE_INTERVAL_SECOND(1秒)間隔でLLMの回答を更新する 
         if now - self.last_token_send_time > CHAT_UPDATE_INTERVAL_SECOND:
             # SlackのAPIを使用してLLMの回答を更新する
+            # self.tsでAIの最初の返答（Typing...✍）を更新する
             app.client.chat_update(
                 channel=self.channel, ts=self.ts, text=f"{self.ai_generated_message}..." # まだ回答途中なので末尾は「...」にしておく
             )
@@ -141,7 +142,5 @@ def just_ack(ack):
 app.event("message")(ack=just_ack, lazy=[handle_direct_message])
 
 if __name__ == "__main__":
-    # SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start() # Socketモードで起動
-
     # Cloud RunはPORT変数でリクエストを流すポート番号を渡す
     app.start(port=int(os.environ.get("PORT", 3000))) # HTTPモードで起動

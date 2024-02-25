@@ -46,7 +46,6 @@ if __name__ == "__main__":
     )
 
     raw_docs = loader.load()
-
     # 読み込んだドキュメントの数をログに記録
     logger.info("Loaded %d documents", len(raw_docs))
 
@@ -60,5 +59,4 @@ if __name__ == "__main__":
     # 分割されたドキュメントをPineconeに追加
     embeddings = OpenAIEmbeddings()
     vectorstore = Pinecone.from_existing_index(index_name, embeddings)
-
     vectorstore.add_documents(docs)
