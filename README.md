@@ -160,3 +160,6 @@ https://github.com/newbee1939/langchain-book/tree/main/chapter8
 - 業務経歴の個人開発に追加する
 - Terraformでコード化しておいていつでも再現できるようにしておく（パッケージとして配布できるように）
     - 記事にする
+- その他Slackの設定とかもメモ
+- Pineconeの有料プラン
+- AIの最新。モデル。GPT-4
