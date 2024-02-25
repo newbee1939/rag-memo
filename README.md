@@ -85,6 +85,8 @@ w1707316441-wp8500715.slack.com
     - 以下のページの値
         - https://console.cloud.google.com/run/detail/asia-northeast1/rag-memo/metrics?project=gig-sample-383607
 - mainにマージすればCloud RunとCloud Run Jobsにデプロイされる
+- 以下のSlackで質問できる
+    - w1707316441-wp8500715.slack.com
 
 ## 関連リンク
 
