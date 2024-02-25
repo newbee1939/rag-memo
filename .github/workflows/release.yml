@@ -64,7 +64,7 @@ jobs:
       - name: Update Container Image
         run: |
           envsubst < ./cloudrun/service.yml > service.yml
-          envsubst < ./cloudrun/service.yml > job.yml
+          envsubst < ./cloudrun/job.yml > job.yml
         env:
           DEPLOY_IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/rag-memo/image:${{ github.sha }}-${{ github.run_attempt }}
 
