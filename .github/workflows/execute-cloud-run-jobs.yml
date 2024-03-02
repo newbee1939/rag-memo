@@ -3,7 +3,7 @@ name: Execute Cloud Run Jobs
 on:
   schedule:
     # - cron: "0 0 * * 1" # 週1回実行　
-    - cron: "0 0 1 * *" # 月1回実行
+    # - cron: "0 0 1 * *" # 月1回実行
 
 permissions:
   id-token: write
